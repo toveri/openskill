@@ -2,6 +2,18 @@ Java implementation of the online ranking algorithms described in https://www.cs
 
 This is a hobby project.
 
+## Installation
+
+To add a dependency using Maven, simply use the following:
+
+```xml
+<dependency>
+  <groupId>io.github.toveri</groupId>
+  <artifactId>openskill</artifactId>
+  <version>1.0</version>
+</dependency>
+```
+
 ## Usage
 
 The Plackett-Luce model is a good general model, but others are available as well. All models default to reasonable settings.

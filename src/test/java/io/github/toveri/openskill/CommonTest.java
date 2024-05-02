@@ -69,13 +69,13 @@ class CommonTest {
     }
 
     @Test
-    void testLadderPairs() {
+    void testGetAdjacentPairs() {
         assertAll(
-                () -> assertEquals(List.of(List.of()), ladderPairs(List.of())),
-                () -> assertEquals(List.of(List.of()), ladderPairs(List.of(1))),
-                () -> assertEquals(List.of(List.of(2), List.of(1)), ladderPairs(List.of(1, 2))),
-                () -> assertEquals(List.of(List.of(2), List.of(1, 3), List.of(2)), ladderPairs(List.of(1, 2, 3))),
-                () -> assertEquals(List.of(List.of(2), List.of(1, 3), List.of(2, 4), List.of(3)), ladderPairs(List.of(1, 2, 3, 4)))
+                () -> assertEquals(List.of(List.of()), getAdjacentPairs(List.of())),
+                () -> assertEquals(List.of(List.of()), getAdjacentPairs(List.of(1))),
+                () -> assertEquals(List.of(List.of(2), List.of(1)), getAdjacentPairs(List.of(1, 2))),
+                () -> assertEquals(List.of(List.of(2), List.of(1, 3), List.of(2)), getAdjacentPairs(List.of(1, 2, 3))),
+                () -> assertEquals(List.of(List.of(2), List.of(1, 3), List.of(2, 4), List.of(3)), getAdjacentPairs(List.of(1, 2, 3, 4)))
         );
     }
 

@@ -9,18 +9,27 @@ import java.util.List;
 
 import static io.github.toveri.openskill.Common.*;
 
+/**
+ * Thurstone-Mosteller full pairing model.
+ */
 public class ThurstoneMostellerFull extends Model {
+    /**
+     * Thurstone-Mosteller full pairing model with default options.
+     */
     public ThurstoneMostellerFull() {
         super();
     }
 
+    /**
+     * Thurstone-Mosteller full pairing model with custom options.
+     * @param options The custom model options.
+     */
     public ThurstoneMostellerFull(ModelOptions options) {
         super(options);
     }
 
-    // Will modify match.
     @Override
-    public Match compute(Match match, List<Double> ranks) {
+    protected Match compute(Match match, List<Double> ranks) {
         List<TeamRating> teamRatings = calculateTeamRatings(match, ranks);
         List<List<Rating>> teams = new ArrayList<>(match.teamCount());
         for (int i = 0; i < teamRatings.size(); i++) {

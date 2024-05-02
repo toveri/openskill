@@ -9,21 +9,30 @@ import java.util.List;
 
 import static io.github.toveri.openskill.Common.*;
 
+/**
+ * Thurstone-Mosteller partial pairing model.
+ */
 public class ThurstoneMostellerPart extends Model {
+    /**
+     * Thurstone-Mosteller partial pairing model with default options.
+     */
     public ThurstoneMostellerPart() {
         super();
     }
 
+    /**
+     * Thurstone-Mosteller partial pairing model with custom options.
+     * @param options The custom model options.
+     */
     public ThurstoneMostellerPart(ModelOptions options) {
         super(options);
     }
 
-    // Will modify match.
     @Override
-    public Match compute(Match match, List<Double> ranks) {
+    protected Match compute(Match match, List<Double> ranks) {
         List<TeamRating> teamRatings = calculateTeamRatings(match, ranks);
         List<List<Rating>> teams = new ArrayList<>(match.teamCount());
-        List<List<TeamRating>> teamsAdjacentPerTeam = ladderPairs(teamRatings);
+        List<List<TeamRating>> teamsAdjacentPerTeam = getAdjacentPairs(teamRatings);
         for (int i = 0; i < teamRatings.size(); i++) {
             TeamRating teamI = teamRatings.get(i);
             List<TeamRating> teamsAdjacent = teamsAdjacentPerTeam.get(i);

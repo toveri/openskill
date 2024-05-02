@@ -16,20 +16,30 @@ import static io.github.toveri.openskill.Common.unwind;
 import static io.github.toveri.openskill.Statistics.phiMajor;
 import static io.github.toveri.openskill.Statistics.phiMajorInverse;
 
+/**
+ * Represents a rating model.
+ */
 public abstract class Model {
-    public final double mu;
-    public final double sigma;
-    public final double beta;
-    public final double betaSq;
-    public final double kappa;
-    public final Gamma gammaFun;
-    public final double tau;
-    public final double tauSq;
+    protected final double mu;
+    protected final double sigma;
+    protected final double beta;
+    protected final double betaSq;
+    protected final double kappa;
+    protected final Gamma gammaFun;
+    protected final double tau;
+    protected final double tauSq;
 
+    /**
+     * Model with default options.
+     */
     public Model() {
         this(new ModelOptionsBuilder().build());
     }
 
+    /**
+     * Model with custom options.
+     * @param options The custom model options.
+     */
     public Model(ModelOptions options) {
         mu = options.mu();
         sigma = options.sigma();
@@ -41,14 +51,25 @@ public abstract class Model {
         tauSq = tau * tau;
     }
 
+    /**
+     * Calculate the square root of the sum of each teams' sigma values squared and beta squared added.
+     * @param teamRatings The list of team ratings.
+     * @return The calculated c value.
+     */
     protected static double c(List<TeamRating> teamRatings) {
-        double totalTeamSigma = 0.0;
+        double sum = 0.0;
         for (TeamRating teamRating : teamRatings) {
-            totalTeamSigma += teamRating.sigmaSq + Constants.BETA_SQ;
+            sum += teamRating.sigmaSq + Constants.BETA_SQ;
         }
-        return Math.sqrt(totalTeamSigma);
+        return Math.sqrt(sum);
     }
 
+    /**
+     * Calculate the values of each team's mu / c, raised to e.
+     * @param teamRatings The list of team ratings.
+     * @param c The value for c.
+     * @return The list of values calculated
+     */
     protected static List<Double> sumQ(List<TeamRating> teamRatings, double c) {
         return teamRatings.stream()
                 .map(qTeamRating -> teamRatings.stream()
@@ -58,6 +79,11 @@ public abstract class Model {
                 ).collect(Collectors.toList());
     }
 
+    /**
+     * Count the number of times a team's rank appears in the list of team ratings.
+     * @param teamRatings The list of team ratings.
+     * @return The list of counts for each rank.
+     */
     protected static List<Integer> a(List<TeamRating> teamRatings) {
         return teamRatings.stream()
                 .map(iTeamRating -> ((int) teamRatings.stream().filter(
@@ -65,11 +91,21 @@ public abstract class Model {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Calculate team ratings using default ranks.
+     * @param match The match to be used.
+     * @return The list of team ratings.
+     */
     protected static List<TeamRating> calculateTeamRatings(Match match) {
         return calculateTeamRatings(match, null);
     }
 
-    // Modifies teams in place.
+    /**
+     * Calculate team ratings using given ranks.
+     * @param match The match to be used.
+     * @param ranks The list of ranks to be used.
+     * @return The list of team ratings.
+     */
     protected static List<TeamRating> calculateTeamRatings(Match match, List<Double> ranks) {
         List<Double> placements;
         if (ranks != null) {
@@ -108,18 +144,31 @@ public abstract class Model {
         return IntStream.range(1, count + 1).mapToDouble(v -> v).boxed().toList();
     }
 
+    /**
+     * Creates a rating object with the defaults of this model.
+     * @return The rating object with default values.
+     */
     public Rating rating() {
         return new Rating(mu, sigma);
     }
 
-    // Does not modify match.
+    /**
+     * Rates the match based on the default rank order.
+     * @param match The match to rate.
+     * @return The Match with the rating applied.
+     */
     public Match rate(Match match) {
         List<Double> ranks = generateDefaultRanks(match.teamCount());
         RateOptions options = new RateOptions(ranks, true);
         return rate(match, options);
     }
 
-    // Does not modify match.
+    /**
+     * Rates the match based on the given options.
+     * @param match The match to rate.
+     * @param options The options to use (ranks or scores).
+     * @return The Match with the rating applied.
+     */
     public Match rate(Match match, RateOptions options) {
         match = new Match(match);
         for (List<Rating> team : match.getTeams()) {
@@ -141,6 +190,11 @@ public abstract class Model {
         return new Match(unwind(compute(orderedMatch, placements).getTeams(), tenet).a());
     }
 
+    /**
+     * Predict the win probability for each team in the match.
+     * @param match The match to predict wins for.
+     * @return The list of probabilities for each team's win.
+     */
     public List<Double> predictWin(Match match) {
         int teamCount = match.teamCount();
         if (teamCount == 2) {
@@ -181,6 +235,11 @@ public abstract class Model {
         return winProbabilities;
     }
 
+    /**
+     * Predict the draw probability for the match.
+     * @param match The match to predict the draw for.
+     * @return The probability for a draw.
+     */
     public double predictDraw(Match match) {
         int teamCount = match.teamCount();
         int playerCount = match.getTeams().stream().map(List::size).reduce(0, Integer::sum);
@@ -207,6 +266,12 @@ public abstract class Model {
         return Math.abs(pairProbabilities.stream().reduce(0.0, Double::sum)) / denom;
     }
 
+    /**
+     * Predict the most probable rank for each team in the match.
+     * This will not add upp to a probability of 1.0 by itself, since a draw is possible as well.
+     * @param match The match to predict ranks for.
+     * @return The list of each team's most probable rank and that probability.
+     */
     public List<List<Double>> predictRank(Match match) {
         int teamCount = match.teamCount();
         int playerCount = match.getTeams().stream().map(List::size).reduce(0, Integer::sum);
@@ -244,13 +309,35 @@ public abstract class Model {
         return rankPredictions;
     }
 
-    // Does modify match.
+    /**
+     * Apply the model's rating algorithm to the match based on the ranks supplied.
+     * @param match The match to compute.
+     * @param ranks The ranks to use.
+     * @return The match with the model's rating algorithm applied.
+     */
     protected abstract Match compute(Match match, List<Double> ranks);
 
+    /**
+     * The function that controls how fast variance is reduced.
+     * @param c The value for c.
+     * @param k The count of teams.
+     * @param mu The mean value.
+     * @param sigmaSq The value for standard deviation squared.
+     * @param team The team (list of ratings).
+     * @param rank The rank of the team.
+     * @return
+     */
     protected double gamma(double c, int k, double mu, double sigmaSq, List<Rating> team, double rank) {
         return gammaFun.gamma(c, k, mu, sigmaSq, team, rank);
     }
 
+    /**
+     * Update the team rating based on the supplied omega and delta values.
+     * @param teamRating The team rating to update.
+     * @param omega The factor apply to the rating mu value.
+     * @param delta The factor to apply to the rating sigma value.
+     * @return The list of updated ratings.
+     */
     protected List<Rating> updateTeamRating(TeamRating teamRating, double omega, double delta) {
         List<Rating> teamRatingsUpdated = new ArrayList<>(teamRating.team.size());
         for (Rating rating : teamRating.team) {

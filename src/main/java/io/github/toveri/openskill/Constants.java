@@ -1,5 +1,8 @@
 package io.github.toveri.openskill;
 
+/**
+ * The default values used for the models and ratings.
+ */
 public final class Constants {
     public static final int Z = 3;
     public static final double MU = 25;

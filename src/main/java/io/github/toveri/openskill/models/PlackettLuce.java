@@ -7,18 +7,27 @@ import io.github.toveri.openskill.Rating;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Plackett-Luce model.
+ */
 public class PlackettLuce extends Model {
+    /**
+     * Plackett-Luce full pairing model with default options.
+     */
     public PlackettLuce() {
         super();
     }
 
+    /**
+     * Plackett-Luce model with custom options.
+     * @param options The custom model options.
+     */
     public PlackettLuce(ModelOptions options) {
         super(options);
     }
 
-    // Will modify match.
     @Override
-    public Match compute(Match match, List<Double> ranks) {
+    protected Match compute(Match match, List<Double> ranks) {
         List<TeamRating> teamRatings = calculateTeamRatings(match, ranks);
         double c = c(teamRatings);
         List<Double> sumQ = sumQ(teamRatings, c);

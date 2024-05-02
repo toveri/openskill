@@ -5,54 +5,78 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Common {
-    public static <T> List<List<T>> ladderPairs(List<T> ratings) {
-        if (ratings.isEmpty()) {
+    /**
+     * Calculate the list of pairs of objects that are adjacent in the list.
+     * @param objects The list of objects.
+     * @return The list of adjacent pairs.
+     */
+    public static <T> List<List<T>> getAdjacentPairs(List<T> objects) {
+        if (objects.isEmpty()) {
             return List.of(List.of());
         }
-        List<T> left = new ArrayList<>(ratings.size());
+        List<T> left = new ArrayList<>(objects.size());
         left.add(null);
-        left.addAll(ratings.subList(0, ratings.size() - 1));
-        List<T> right = new ArrayList<>(ratings.size());
-        right.addAll(ratings.subList(1, ratings.size()));
+        left.addAll(objects.subList(0, objects.size() - 1));
+        List<T> right = new ArrayList<>(objects.size());
+        right.addAll(objects.subList(1, objects.size()));
         right.add(null);
-        List<List<T>> ladderPairs = new ArrayList<>(ratings.size());
-        for (int i = 0; i < ratings.size(); i++) {
+        List<List<T>> adjacentPairs = new ArrayList<>(objects.size());
+        for (int i = 0; i < objects.size(); i++) {
             T l = left.get(i);
             T r = right.get(i);
             if (l != null && r != null) {
-                ladderPairs.add(List.of(l, r));
+                adjacentPairs.add(List.of(l, r));
             } else if (l != null) {
-                ladderPairs.add(List.of(l));
+                adjacentPairs.add(List.of(l));
             } else if (r != null) {
-                ladderPairs.add(List.of(r));
+                adjacentPairs.add(List.of(r));
             } else {
-                ladderPairs.add(List.of());
+                adjacentPairs.add(List.of());
             }
         }
-        return ladderPairs;
+        return adjacentPairs;
     }
 
-    public static <T> Pair<List<T>, List<Double>> unwind(List<T> values, List<Double> tenets) {
+    /**
+     * Sorts a list of objects based on a given order, and returns the sorted list
+     * along with the list of tenets (used to sort the objects in their original order).
+     * @param objects The list of objects to sort.
+     * @param tenets The order to sort in.
+     * @return The sorted list of objects and the tenets.
+     */
+    public static <T> Pair<List<T>, List<Double>> unwind(List<T> objects, List<Double> tenets) {
         List<Triplet<Double, Double, T>> zipped = new ArrayList<>(tenets.size());
         for (int i = 0; i < tenets.size(); i++) {
-            zipped.add(new Triplet<>(tenets.get(i), (double) i, values.get(i)));
+            zipped.add(new Triplet<>(tenets.get(i), (double) i, objects.get(i)));
         }
         zipped.sort(Comparator.comparingDouble(triplet -> triplet.a));
-        List<T> valuesSorted = new ArrayList<>(zipped.size());
+        List<T> objectsSorted = new ArrayList<>(zipped.size());
         List<Double> indicesSorted = new ArrayList<>(zipped.size());
         for (Triplet<Double, Double, T> triplet : zipped) {
-            valuesSorted.add(triplet.c);
+            objectsSorted.add(triplet.c);
             indicesSorted.add(triplet.b);
         }
-        return new Pair<>(valuesSorted, indicesSorted);
+        return new Pair<>(objectsSorted, indicesSorted);
     }
 
+    /**
+     * The function V defined in the Weng-Lin paper.
+     * @param x A number.
+     * @param t A number.
+     * @return A number.
+     */
     public static double v(double x, double t) {
         double xt = x - t;
         double denom = Statistics.phiMajor(xt);
         return denom > 0 ? Statistics.phiMinor(xt) / denom : -xt;
     }
 
+    /**
+     * The function W defined in the Weng-Lin paper.
+     * @param x A number.
+     * @param t A number.
+     * @return A number.
+     */
     public static double w(double x, double t) {
         double xt = x - t;
         double denom = Statistics.phiMajor(xt);
@@ -62,6 +86,12 @@ public class Common {
         return x < 0 ? 1 : 0;
     }
 
+    /**
+     * The function Ṽ defined in the Weng-Lin paper.
+     * @param x A number.
+     * @param t A number.
+     * @return A number.
+     */
     public static double vt(double x, double t) {
         double xx = Math.abs(x);
         double denom = Statistics.phiMajor(t - xx) - Statistics.phiMajor(-t - xx);
@@ -72,6 +102,12 @@ public class Common {
         return x < 0 ? -x - t : -x + t;
     }
 
+    /**
+     * The function W̃ defined in the Weng-Lin paper.
+     * @param x A number.
+     * @param t A number.
+     * @return A number.
+     */
     public static double wt(double x, double t) {
         double xx = Math.abs(x);
         double denom = Statistics.phiMajor(t - xx) - Statistics.phiMajor(-t - xx);
@@ -80,10 +116,17 @@ public class Common {
                 : 1.0;
     }
 
+    /**
+     * A container for a pair of objects.
+     * @param a Value a.
+     * @param b Value b.
+     * @param <A> Type for a.
+     * @param <B> Type for b.
+     */
     public record Pair<A, B>(A a, B b) {
     }
 
-    public record Triplet<A, B, C>(A a, B b, C c) {
+    private record Triplet<A, B, C>(A a, B b, C c) {
     }
 }
 

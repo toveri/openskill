@@ -7,18 +7,27 @@ import io.github.toveri.openskill.Rating;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Bradley-Terry full pairing model.
+ */
 public class BradleyTerryFull extends Model {
+    /**
+     * Bradley-Terry full pairing model with default options.
+     */
     public BradleyTerryFull() {
         super();
     }
 
+    /**
+     * Bradley-Terry full pairing model with custom options.
+     * @param options The custom model options.
+     */
     public BradleyTerryFull(ModelOptions options) {
         super(options);
     }
 
-    // Will modify match.
     @Override
-    public Match compute(Match match, List<Double> ranks) {
+    protected Match compute(Match match, List<Double> ranks) {
         List<TeamRating> teamRatings = calculateTeamRatings(match, ranks);
         List<List<Rating>> teams = new ArrayList<>(match.teamCount());
         for (int i = 0; i < teamRatings.size(); i++) {

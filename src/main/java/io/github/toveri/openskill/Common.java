@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Common utilities.
+ */
 public class Common {
+    private Common () {}
+
     /**
      * Calculate the list of pairs of objects that are adjacent in the list.
      * @param objects The list of objects.
      * @return The list of adjacent pairs.
+     * @param <T> The type for object.
      */
     public static <T> List<List<T>> getAdjacentPairs(List<T> objects) {
         if (objects.isEmpty()) {
@@ -43,6 +49,7 @@ public class Common {
      * @param objects The list of objects to sort.
      * @param tenets The order to sort in.
      * @return The sorted list of objects and the tenets.
+     * @param <T> The type for object.
      */
     public static <T> Pair<List<T>, List<Double>> unwind(List<T> objects, List<Double> tenets) {
         List<Triplet<Double, Double, T>> zipped = new ArrayList<>(tenets.size());

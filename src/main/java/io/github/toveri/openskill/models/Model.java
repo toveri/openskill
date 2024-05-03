@@ -20,13 +20,37 @@ import static io.github.toveri.openskill.Statistics.phiMajorInverse;
  * Represents a rating model.
  */
 public abstract class Model {
+    /**
+     * The default mean value.
+     */
     protected final double mu;
+    /**
+     * The default standard deviation.
+     */
     protected final double sigma;
+    /**
+     * The uncertainty value.
+     */
     protected final double beta;
+    /**
+     * The uncertainty value squared.
+     */
     protected final double betaSq;
+    /**
+     * The value to prevent negative posterior distributions.
+     */
     protected final double kappa;
+    /**
+     * The function that controls how fast the variance is reduced.
+     */
     protected final Gamma gammaFun;
+    /**
+     * The minimum rating variance value.
+     */
     protected final double tau;
+    /**
+     * The minimum rating variance value squared.
+     */
     protected final double tauSq;
 
     /**
@@ -325,7 +349,7 @@ public abstract class Model {
      * @param sigmaSq The value for standard deviation squared.
      * @param team The team (list of ratings).
      * @param rank The rank of the team.
-     * @return
+     * @return The gamma value.
      */
     protected double gamma(double c, int k, double mu, double sigmaSq, List<Rating> team, double rank) {
         return gammaFun.gamma(c, k, mu, sigmaSq, team, rank);

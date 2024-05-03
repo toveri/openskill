@@ -19,6 +19,11 @@ public class ModelOptionsBuilder {
     private Double tau = null;
 
     /**
+     * A model options builder with no set fields.
+     */
+    public ModelOptionsBuilder() {}
+
+    /**
      * Sets the value of the mean.
      *
      * @param mu The mean value.

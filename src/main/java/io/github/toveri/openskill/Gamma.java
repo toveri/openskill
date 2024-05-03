@@ -15,7 +15,7 @@ public interface Gamma {
      * @param sigmaSq The value for standard deviation squared.
      * @param team The team (list of ratings).
      * @param rank The rank of the team.
-     * @return
+     * @return The gamma value.
      */
     double gamma(double c, int k, double mu, double sigmaSq, List<Rating> team, double rank);
 }

@@ -6,8 +6,10 @@ import org.hipparchus.distribution.continuous.NormalDistribution;
  * Statistics used to calculate rating updates.
  * Calculations are done using a standard normal distribution.
  */
-public class Statistics {
+public final class Statistics {
     private static final NormalDistribution nd = new NormalDistribution();
+
+    private Statistics() {}
 
     /**
      * The cumulative distribution function (CDF).

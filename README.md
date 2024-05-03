@@ -4,8 +4,6 @@ This is a hobby project.
 
 ## Installation
 
-To add a dependency using Maven, simply use the following:
-
 ```shell
 git clone https://github.com/toveri/openskill
 cd openskill

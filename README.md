@@ -6,12 +6,10 @@ This is a hobby project.
 
 To add a dependency using Maven, simply use the following:
 
-```xml
-<dependency>
-  <groupId>io.github.toveri</groupId>
-  <artifactId>openskill</artifactId>
-  <version>1.0.0</version>
-</dependency>
+```shell
+git clone https://github.com/toveri/openskill
+cd openskill
+mvn install
 ```
 
 ## Usage

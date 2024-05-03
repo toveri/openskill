@@ -21,10 +21,6 @@ public final class Constants {
      */
     public static final double BETA = SIGMA / 2;
     /**
-     * The default uncertainty value squared.
-     */
-    public static final double BETA_SQ = BETA * BETA;
-    /**
      * The default minimum rating variance value.
      */
     public static final double TAU = MU / 300;

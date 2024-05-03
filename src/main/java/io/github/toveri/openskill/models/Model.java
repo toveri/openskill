@@ -80,10 +80,10 @@ public abstract class Model {
      * @param teamRatings The list of team ratings.
      * @return The calculated c value.
      */
-    protected static double c(List<TeamRating> teamRatings) {
+    protected double c(List<TeamRating> teamRatings) {
         double sum = 0.0;
         for (TeamRating teamRating : teamRatings) {
-            sum += teamRating.sigmaSq + Constants.BETA_SQ;
+            sum += teamRating.sigmaSq + betaSq;
         }
         return Math.sqrt(sum);
     }

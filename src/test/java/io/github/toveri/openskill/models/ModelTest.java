@@ -72,18 +72,19 @@ public class ModelTest {
 
     @Test
     void testC() {
+        Model model = getInstance();
         Rating r = new Rating();
         double sigmaSq = r.sigma * r.sigma;
         List<TeamRating> teamRatings = List.of(
                 new TeamRating(0, 1 * sigmaSq, null, 0),
                 new TeamRating(0, 2 * sigmaSq, null, 0)
         );
-        Assertions.assertEquals(15.590239111558091, Model.c(teamRatings));
+        Assertions.assertEquals(15.590239111558091, model.c(teamRatings));
         teamRatings = List.of(
                 new TeamRating(0, 5 * sigmaSq, null, 0),
                 new TeamRating(0, 5 * sigmaSq, null, 0)
         );
-        Assertions.assertEquals(27.003086243366084, Model.c(teamRatings));
+        Assertions.assertEquals(27.003086243366084, model.c(teamRatings));
     }
 
     @Test
@@ -111,19 +112,20 @@ public class ModelTest {
 
     @Test
     void testSumQ() {
+        Model model = getInstance();
         Rating r = new Rating();
         double sigmaSq = (r.sigma * r.sigma);
         List<TeamRating> teamRatings = List.of(
                 new TeamRating(1 * r.mu, 1 * sigmaSq, null, 1),
                 new TeamRating(2 * r.mu, 2 * sigmaSq, null, 2)
         );
-        double c = Model.c(teamRatings);
+        double c = model.c(teamRatings);
         Assertions.assertEquals(List.of(29.67892702634643, 24.70819334370875), Model.sumQ(teamRatings, c));
         teamRatings = List.of(
                 new TeamRating(5 * r.mu, 5 * sigmaSq, null, 1),
                 new TeamRating(5 * r.mu, 5 * sigmaSq, null, 2)
         );
-        c = Model.c(teamRatings);
+        c = model.c(teamRatings);
         Assertions.assertEquals(List.of(204.84378810598616, 102.42189405299308), Model.sumQ(teamRatings, c));
     }
 

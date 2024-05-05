@@ -4,6 +4,18 @@ This is a hobby project.
 
 ## Installation
 
+To add a dependency using Maven Central, simply add it to your pom.xml:
+
+```xml
+<dependency>
+    <groupId>io.github.toveri</groupId>
+    <artifactId>openskill</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+Alternatively build it from the source files.
+
 ```shell
 git clone https://github.com/toveri/openskill
 cd openskill
